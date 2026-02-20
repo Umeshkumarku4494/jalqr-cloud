@@ -1,0 +1,33 @@
+#	Chlorine	Nitrate	Iron	Phosphate	Output	
+1	Light Pink	White	Clear	Clear	Safe-Drink normally	
+2	Light Pink	White	Clear	Blue	Safe-Drink normally	
+3	Light Pink	White	Orange	Clear	Caution-Safe but filter recommended	
+4	Light Pink	White	Orange	Blue	Caution-Safe but filter recommended	
+5	Light Pink	Bright Pink	Clear	Clear	Unsafe-Do not drink	
+6	Light Pink	Bright Pink	Clear	Blue	Unsafe-Do not drink	
+7	Light Pink	Bright Pink	Orange	Clear	Unsafe-Do not drink	
+8	Light Pink	Bright Pink	Orange	Blue	Unsafe-Do not drink	
+9	Pink	White	Clear	Clear	Safe-Drink normally	
+10	Pink	White	Clear	Blue	Safe-Drink normally	
+11	Pink	White	Orange	Clear	Caution-Safe but filter recommended	
+12	Pink	White	Orange	Blue	Caution-Safe but filter recommended	
+13	Pink	Bright Pink	Clear	Clear	Unsafe-Do not drink	
+14	Pink	Bright Pink	Clear	Blue	Unsafe-Do not drink	
+15	Pink	Bright Pink	Orange	Clear	Unsafe-Do not drink	
+16	Pink	Bright Pink	Orange	Blue	Unsafe-Do not drink	
+17	Colorless	White	Clear	Clear	Risky-Boil before drinking	
+18	Colorless	White	Clear	Blue	Risky-Boil before drinking	
+19	Colorless	White	Orange	Clear	Caution-Safe but filter recommended	
+20	Colorless	White	Orange	Blue	Caution-Safe but filter recommended	
+21	Colorless	Bright Pink	Clear	Clear	Unsafe-Do not drink	
+22	Colorless	Bright Pink	Clear	Blue	Unsafe-Do not drink	
+23	Colorless	Bright Pink	Orange	Clear	Unsafe-Do not drink	
+24	Colorless	Bright Pink	Orange	Blue	Unsafe-Do not drink	
+25	Dark Magenta	White	Clear	Clear	Unsafe-Do not drink	
+26	Dark Magenta	White	Clear	Blue	Unsafe-Do not drink	
+27	Dark Magenta	White	Orange	Clear	Unsafe-Do not drink	
+28	Dark Magenta	White	Orange	Blue	Unsafe-Do not drink	
+29	Dark Magenta	Bright Pink	Clear	Clear	Unsafe-Do not drink	
+30	Dark Magenta	Bright Pink	Clear	Blue	Unsafe-Do not drink	
+31	Dark Magenta	Bright Pink	Orange	Clear	Unsafe-Do not drink	
+32	Dark Magenta	Bright Pink	Orange	Blue	Unsafe-Do not drink	
