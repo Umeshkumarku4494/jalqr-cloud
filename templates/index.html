@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JALQR Water Scanner</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f4f8; }
+        #container { margin-top: 20px; }
+        video { border: 5px solid #333; border-radius: 10px; width: 90%; max-width: 600px; }
+        #results { margin-top: 20px; padding: 15px; background: white; display: inline-block; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>💧 JALQR – AI Water Scanner</h1>
+    
+    <div id="container">
+        <video id="webcam" autoplay playsinline></video>
+    </div>
+
+    <div id="results">
+        <h3>Detected Levels:</h3>
+        <p id="status">Status: Waiting...</p>
+        <div id="chemicals">Scanning for QR code...</div>
+    </div>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <script>
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const chemDiv = document.getElementById('chemicals');
+        const statusP = document.getElementById('status');
+
+        // 1. Start the camera in the browser
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" } // Prefers back camera on phones
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Camera error:", err);
+                statusP.innerText = "Error: Camera access denied.";
+            }
+        }
+
+        // 2. Capture and send frame to app.py
+        function captureFrame() {
+            if (video.videoWidth === 0) return;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert frame to Base64 string
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            fetch('/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: imageData })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Display results from your jalqr_realtime_engine
+                statusP.innerText = "Status: " + (data.status || "Scanning");
+                chemDiv.innerHTML = `
+                    Cl: ${data.chlorine || 0} | 
+                    NO3: ${data.nitrate || 0} | 
+                    Fe: ${data.iron || 0}
+                `;
+            })
+            .catch(err => console.error("Server error:", err));
+        }
+
+        startCamera();
+        // Send a frame every 1 second
+        setInterval(captureFrame, 1000);
+    </script>
+</body>
+</html>
