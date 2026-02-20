@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JalQR – Smart Water Scanner</title>
+
     <style>
         :root {
             --primary-blue: #0072ff;
@@ -39,7 +40,7 @@
         .main-container {
             width: 90%;
             max-width: 500px;
-            margin-top: -30px; /* Overlap with header */
+            margin-top: -30px;
         }
 
         .card {
@@ -105,15 +106,19 @@
         }
     </style>
 </head>
+
 <body>
 
 <header>
     <h1>JalQR</h1>
     <div class="tagline">Scan. Detect. Drink Safe. 💧</div>
-    <p class="description">JalQR analyzes key water parameters and instantly tells you if your water is safe.</p>
+    <p class="description">
+        JalQR analyzes key water parameters and instantly tells you if your water is safe.
+    </p>
 </header>
 
 <div class="main-container">
+
     <div class="card">
         <div id="video-container">
             <video id="webcam" autoplay playsinline></video>
@@ -125,17 +130,31 @@
             <span>DETECTION REPORT</span>
             <span id="status-badge">WAITING...</span>
         </div>
+
         <div class="chem-grid">
-            <div class="chem-item"><span class="chem-label">Chlorine</span><span class="chem-value" id="cl">-</span></div>
-            <div class="chem-item"><span class="chem-label">Nitrate</span><span class="chem-value" id="no3">-</span></div>
-            <div class="chem-item"><span class="chem-label">Iron</span><span class="chem-value" id="fe">-</span></div>
-            <div class="chem-item"><span class="chem-label">Phosphate</span><span class="chem-value" id="po4">-</span></div>
+            <div class="chem-item">
+                <span class="chem-label">Chlorine</span>
+                <span class="chem-value" id="cl">-</span>
+            </div>
+            <div class="chem-item">
+                <span class="chem-label">Nitrate</span>
+                <span class="chem-value" id="no3">-</span>
+            </div>
+            <div class="chem-item">
+                <span class="chem-label">Iron</span>
+                <span class="chem-value" id="fe">-</span>
+            </div>
+            <div class="chem-item">
+                <span class="chem-label">Phosphate</span>
+                <span class="chem-value" id="po4">-</span>
+            </div>
         </div>
     </div>
 
     <div class="footer-cta">
         Know Your Water Before You Drink It! 💧
     </div>
+
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
@@ -148,22 +167,30 @@
 
     async function initCamera() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: "environment" } 
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment" }
             });
             video.srcObject = stream;
         } catch (err) {
-            alert("Camera error: Please ensure you are using HTTPS and have granted permissions.");
+            alert("Camera error: Please use HTTPS and allow camera access.");
         }
     }
 
     function captureAndAnalyze() {
+
         if (video.videoWidth === 0) return;
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+
+        // 🔥 Resize to max 400px width
+        const MAX_WIDTH = 400;
+        const scale = MAX_WIDTH / video.videoWidth;
+
+        canvas.width = MAX_WIDTH;
+        canvas.height = video.videoHeight * scale;
+
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        const imageData = canvas.toDataURL('image/jpeg', 0.7);
+
+        // 🔥 Compress image
+        const imageData = canvas.toDataURL('image/jpeg', 0.5);
 
         fetch('/analyze', {
             method: 'POST',
@@ -172,24 +199,28 @@
         })
         .then(res => res.json())
         .then(data => {
+
             statusBadge.innerText = data.status || "CHECK";
+
             document.getElementById('cl').innerText = data.chlorine || "NA";
             document.getElementById('no3').innerText = data.nitrate || "NA";
             document.getElementById('fe').innerText = data.iron || "NA";
             document.getElementById('po4').innerText = data.phosphate || "NA";
 
-            // Color code the status
             if(data.status === "SAFE") statusBadge.style.background = "#48bb78";
             else if(data.status === "UNSAFE") statusBadge.style.background = "#f56565";
             else if(data.status === "CAUTION") statusBadge.style.background = "#ed8936";
             else statusBadge.style.background = "#e0e0e0";
+
             if(data.status) statusBadge.style.color = "white";
         })
-        .catch(e => console.error(e));
+        .catch(e => console.error("Error:", e));
     }
 
     initCamera();
-    setInterval(captureAndAnalyze, 1500);
+
+    // 🔥 Slightly slower interval for stability
+    setInterval(captureAndAnalyze, 2500);
 </script>
 
 </body>
