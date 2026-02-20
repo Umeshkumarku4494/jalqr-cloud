@@ -5,7 +5,10 @@ from flask import Flask, Response, render_template_string
 # ----------------------------
 # CONFIG
 # ----------------------------
-conditions_file = r"C:\Users\Lenovo\Desktop\JalQR\Conditions.txt"
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+conditions_file = os.path.join(BASE_DIR, "Conditions.txt")
 
 print("JALQR Classification Engine")
 print("Loading rules...")
